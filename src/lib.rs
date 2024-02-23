@@ -1,4 +1,4 @@
-use derive_weight::{derive_weight_expr, derive_weight_fn, derive_weight_result};
+use derive_weight::derive_weight;
 use frame_support::pallet_prelude::Weight;
 
 #[test]
@@ -18,7 +18,7 @@ fn test_result() {
     assert_eq!(weighted_ok_something(1), Weight::from_parts(10, 10));
 }
 
-#[derive_weight_expr(Weight::zero())]
+#[derive_weight(Weight::zero())]
 fn do_something(i: u32) -> u32 {
     i * i
 }
@@ -27,23 +27,21 @@ fn do_something(i: u32) -> u32 {
 fn weight_for_do_something_else(i: u32, _j: u32) -> Weight {
     if i == 0 {
         Weight::from_parts(10, 10)
-    }
-    else {
+    } else {
         Weight::from_parts(20, 20)
     }
 }
 
-#[derive_weight_fn(weight_for_do_something_else)]
+#[derive_weight(weight_for_do_something_else)]
 fn do_something_else(i: u32, j: u32) -> u32 {
     if i == 0 {
         i + j
-    }
-    else {
-        i/j
+    } else {
+        i / j
     }
 }
 
-#[derive_weight_result((Weight::zero(), Weight::from_parts(10, 10)))]
+#[derive_weight((Weight::zero(), Weight::from_parts(10, 10)))]
 fn ok_something(i: u32) -> Result<(), ()> {
     if i == 0 {
         Ok(())
