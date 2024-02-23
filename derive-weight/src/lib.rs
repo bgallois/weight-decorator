@@ -2,6 +2,22 @@ use proc_macro::TokenStream;
 use quote::quote;
 use syn::{Expr, ExprTuple, FnArg, Ident, ItemFn, Pat};
 
+/// This is a procedural macro attribute function that implements the `derive_weight_expr` macro.
+///
+/// * `attr`: Represents the weight annotation that should be a valid Rust expression.
+/// * `item`: Represents the function to which the macro is applied.
+///
+/// # Examples
+///
+/// ```
+/// #[derive_weight_expr(Weight::from_parts(10, 10))]
+/// fn do_something(i: u32, j: u32) -> u32 {
+///     i * j
+/// }
+///
+/// assert_eq!(weighted_do_something(1, 2), Weight::from_parts(10, 10));
+/// ```
+///
 #[proc_macro_attribute]
 pub fn derive_weight_expr(attr: TokenStream, item: TokenStream) -> TokenStream {
     let ast: ItemFn = syn::parse(item).expect("Failed to parse input as a function!");
@@ -23,6 +39,37 @@ pub fn derive_weight_expr(attr: TokenStream, item: TokenStream) -> TokenStream {
     gen.into()
 }
 
+/// This is a procedural macro attribute function that implements the `derive_weight_fn` macro.
+///
+/// * `attr`: Represents the weight annotation that should be a valid Rust function.
+/// * `item`: Represents the function to which the macro is applied.
+///
+/// # Examples
+///
+/// ```
+/// #[allow(dead_code)]
+/// fn weight_for_do_something(_i: u32, _j: u32) -> Weight {
+///    if i == 0 {
+///        Weight::from_parts(10, 10)
+///    }
+///    else {
+///        Weight::from_parts(20, 20)
+///    }
+/// }
+/// #[derive_weight_expr(weight_for_do_something)]
+/// fn do_something(i: u32, j: u32) -> u32 {
+///    if i == 0 {
+///        i + j
+///    }
+///    else {
+///        i/j
+///    }
+/// }
+///
+/// assert_eq!(weighted_do_something(0, 2), Weight::from_parts(10, 10));
+/// assert_eq!(weighted_do_something(10, 2), Weight::from_parts(20, 20));
+/// ```
+///
 #[proc_macro_attribute]
 pub fn derive_weight_fn(attr: TokenStream, item: TokenStream) -> TokenStream {
     let ast: ItemFn = syn::parse(item).expect("Failed to parse input as a function!");
@@ -53,6 +100,27 @@ pub fn derive_weight_fn(attr: TokenStream, item: TokenStream) -> TokenStream {
     gen.into()
 }
 
+/// This is a procedural macro attribute function that implements the `derive_weight_result` macro.
+///
+/// * `attr`: Represents the weight annotation that should be a tuple (weight_ok, weight_err).
+/// * `item`: Represents the function to which the macro is applied.
+///
+/// # Examples
+///
+/// ```
+/// #[derive_weight_result((Weight::zero(), Weight::from_parts(10, 10)))]
+/// fn do_something(i: u32, j: u32) -> u32 {
+///    if i == 0 {
+///        Ok(())
+///    } else {
+///        Err(())
+///    }
+/// }
+///
+/// assert_eq!(weighted_do_something(0), weight::from_parts(0, 0));
+/// assert_eq!(weighted_do_something(1), weight::from_parts(10, 10));
+/// ```
+///
 #[proc_macro_attribute]
 pub fn derive_weight_result(attr: TokenStream, item: TokenStream) -> TokenStream {
     let ast: ItemFn = syn::parse(item).expect("Failed to parse input as a function!");
