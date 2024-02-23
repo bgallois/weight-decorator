@@ -1,4 +1,5 @@
-workspace = { members = ["weight-decorator-derive"] }
+workspace = { members = ["derive-weight"] }
+
 [package]
 name = "weight-decorator"
 version = "0.1.0"
@@ -8,5 +9,5 @@ edition = "2021"
 proc-macro = true
 
 [dependencies]
-weight-decorator-derive = { path="weight-decorator-derive" }
+derive-weight = { path="./derive-weight" }
 frame-support = "29.0.0"

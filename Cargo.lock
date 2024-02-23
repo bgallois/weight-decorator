@@ -460,9 +460,9 @@ dependencies = [
 
 [[package]]
 name = "bumpalo"
-version = "3.15.2"
+version = "3.15.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "a3b1be7772ee4501dba05acbe66bb1e8760f6a6c474a36035631638e4415f130"
+checksum = "8ea184aa71bb362a1157c896979544cc23974e08fd265f29ea96b59f0b4a555b"
 
 [[package]]
 name = "byte-slice-cast"
@@ -740,6 +740,16 @@ dependencies = [
  "proc-macro2",
  "quote",
  "syn 1.0.109",
+]
+
+[[package]]
+name = "derive-weight"
+version = "0.1.0"
+dependencies = [
+ "frame-support",
+ "itertools 0.12.1",
+ "quote",
+ "syn 2.0.50",
 ]
 
 [[package]]
@@ -3625,18 +3635,8 @@ dependencies = [
 name = "weight-decorator"
 version = "0.1.0"
 dependencies = [
+ "derive-weight",
  "frame-support",
- "weight-decorator-derive",
-]
-
-[[package]]
-name = "weight-decorator-derive"
-version = "0.1.0"
-dependencies = [
- "frame-support",
- "itertools 0.12.1",
- "quote",
- "syn 2.0.50",
 ]
 
 [[package]]
